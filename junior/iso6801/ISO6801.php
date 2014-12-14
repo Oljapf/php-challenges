@@ -2,7 +2,7 @@
   
 function solution1 ($date) {
     $year = substr($date, 3, 2);
-    $output = '-' . substr($date, 0, 2) . '-' . substr($date, 6);
+    $output = '-' . substr($date, 0, 2) . '-' . substr($date, 6, 2);
 
     if($year <= 14){
         $output = '20' . $year . $output;
@@ -10,8 +10,7 @@ function solution1 ($date) {
         $output = '19' . $year . $output;
     }
 
-    //file_put_contents($output, $date, FILE_APPEND | LOCK_EX);
-    echo $output;
+    return $output;
 }
 
 function solution2 ($date) {
@@ -74,67 +73,60 @@ function solution2 ($date) {
         $output = '19' . $year;
     }
 
-    $output = $output . '-' . $month . '-' . substr($date, 4, 2) . "\n";
-    trim($output);
-    //file_put_contents($output, $date, FILE_APPEND | LOCK_EX);
-    echo $output;
+    $output = $output . '-' . $month . '-' . substr($date, 4, 2);
+    return $output;
 }
 
 function solution3 ($date) {
-    $output = substr($date, 6, 4). '-' . substr($date, 3, 2) . '-' . substr($date, 0, 2) . "\n";
-    //file_put_contents($output, $date, FILE_APPEND | LOCK_EX);
-    trim($output);
-    echo $output;
+    $output = substr($date, 6, 4). '-' . substr($date, 3, 2) . '-' . substr($date, 0, 2);
+    return $output;
 }
 
 function solution4 ($date) {
     $year = substr($date, 6, 2);
-    $output = '-' . substr($date, 0, -8) . '-' . substr($date, 3, -5);
-    trim($output);
+    $output = '-' . substr($date, 0, 2) . '-' . substr($date, 3, 2);
+    //trim($output);
     if($year <= 14){
         $output = '20' . $year . $output;
     } else {
         $output = '19' . $year . $output;
     }
     
-  	echo $output . "\n";
-    //file_put_contents($output, $date, FILE_APPEND | LOCK_EX);
+    return $output;
 }
 
 $input = fopen(realpath("E:\Jobs\php-challenges\junior\iso6801\date-input.txt"), "r") or die ("Unable to open date-input.txt");
-
-//$output = fopen("date-output.txt", "w") or die ("Unable to open date-input.txt");
+$output = fopen("E:\Jobs\php-challenges\junior\iso6801\date-output.txt", "w") or die ("Unable to open date-input.txt");
 
 while (!feof($input)) {
     $line = fgets($input);
-    echo " " . "\n";
-    echo $line;
-
+    
     switch ($line) {
 
         case (strpos($line, '#') !== false):
-          	solution1($line);
+          	$date = solution1($line);
             break;
             
         case (strpos($line, ' ') !== false):
-            solution2($line);
+            $date = solution2($line);
             break;
             
         case (strpos($line, '*') !== false):
-            solution3($line);
+            $date = solution3($line);
             break;
         
         case (strpos($line, '-') !== false):
-          	echo $line;
+          	$date = trim($line);
             break;
 
         case (strpos($line, '/') !== false):
-            solution4($line);
+            $date = solution4($line);
             break;
     } 
+    fwrite($output, $date . PHP_EOL);
 }
 
 fclose($input);
-//fclose($output);
+fclose($output);
 
 ?>
